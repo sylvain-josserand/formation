@@ -13,9 +13,10 @@ class MoneyField(models.DecimalField):
             **kwargs,
         )
 
+
 class ActiveTransactionManager(models.Manager):
     def get_queryset(self):
-        return super(ActiveTransactionManager, self).get_queryset().filter(actif=True)
+        return super(ActiveTransactionManager, self).get_queryset().filter(active=True)
 
 
 class DatedModel(models.Model):
@@ -27,8 +28,8 @@ class DatedModel(models.Model):
 
 class Transaction(DatedModel):
     label = models.CharField(max_length=100)
-    amount = MoneyField()
-    currency = models.CharField(
+    initial_amount = MoneyField()
+    initial_currency = models.CharField(
         max_length=3,
         choices=(
             ('EUR', 'Euro'),
@@ -37,11 +38,24 @@ class Transaction(DatedModel):
         ),
         default='EUR',
     )
+    converted_amount = MoneyField(default=None, blank=True, null=True)
     active = models.BooleanField(default=True)
 
     activetransactions = ActiveTransactionManager()
 
+    def save(self, *args, **kwargs):
+        self.converted_amount = self.convert(from_=self.initial_currency, to='EUR', amount=self.initial_amount)
+        super(Transaction, self).save(*args, **kwargs)
 
+    @property
+    def conversion_rate(self):
+        if self.amount == 0:
+            raise Exception('Not possible to get the conversion rate when initial amount is zero!")
+        return self.converted_amount/self.amount
 
-
-    
+    def convert(self, from_, to, amount):
+        if from_==to:
+            return amount
+        else:
+            # Get conversion rates from fixer.io
+            pass
