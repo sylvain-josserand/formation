@@ -13,6 +13,9 @@ class MoneyField(models.DecimalField):
             **kwargs,
         )
 
+class ActiveTransactionManager(models.Manager):
+    def get_queryset(self):
+        return super(ActiveTransactionManager, self).get_queryset().filter(actif=True)
 
 
 class DatedModel(models.Model):
@@ -25,5 +28,10 @@ class DatedModel(models.Model):
 class Transaction(DatedModel):
     label = models.CharField(max_length=100)
     amount = MoneyField()
+    active = models.BooleanField(default=True)
+    activetransactions = ActiveTransactionManager()
+
+
+
 
     
