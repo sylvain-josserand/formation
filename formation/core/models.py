@@ -28,7 +28,17 @@ class DatedModel(models.Model):
 class Transaction(DatedModel):
     label = models.CharField(max_length=100)
     amount = MoneyField()
+    currency = models.CharField(
+        max_length=3,
+        choices=(
+            ('EUR', 'Euro'),
+            ('USD', 'Dollar US'),
+            ('JPY', 'Yen'),
+        ),
+        default='EUR',
+    )
     active = models.BooleanField(default=True)
+
     activetransactions = ActiveTransactionManager()
 
 
