@@ -1,5 +1,6 @@
 from core.models import Transaction
 from django.contrib.auth.models import AnonymousUser
+from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView
 
 
@@ -27,6 +28,10 @@ class TransactionDetailView(AuthMixin, DetailView):
 class TransactionCreateView(AuthMixin, CreateView):
     model = Transaction
     fields = ['label', 'initial_amount', 'initial_currency']
+    success_url = '/'
 
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.owner = self.request.user
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
