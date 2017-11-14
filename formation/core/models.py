@@ -1,5 +1,6 @@
 from django.db import models
 from decimal import Decimal
+import requests
 
 
 class MoneyField(models.DecimalField):
@@ -51,11 +52,20 @@ class Transaction(DatedModel):
     def conversion_rate(self):
         if self.initial_amount == 0:
             raise Exception("Not possible to get the conversion rate when initial amount is zero!")
-        return self.converted_amount/self.initial_amount
+        return self.initial_amount/self.converted_amount
 
     def convert(self, from_, to, amount):
         if from_==to:
             return amount
         else:
             # Get conversion rates from fixer.io
-            pass
+            response = requests.get('https://api.fixer.io/latest')
+
+            if response.status_code == 200:
+                json_response = response.json()
+                assert 'base' in json_response
+                assert json_response['base'] == to
+                rate = json_response['rates'][from_]
+                return amount/rate
+            else:
+                raise Exception('Error when accessing fixer.io')
