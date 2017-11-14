@@ -15,12 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from core.views import TransactionListView
-from core.views import TransactionDetailView
+from core.views import (
+    TransactionListView,
+    TransactionDetailView,
+    TransactionCreateView,
+)
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', TransactionListView.as_view(), name='transaction_list'),
+    url(r'^create$', TransactionCreateView.as_view(), name='transaction_create'),
     url(r'^detail/(?P<pk>\d+)', TransactionDetailView.as_view(), name='transaction_detail'),
 ]

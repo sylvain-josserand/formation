@@ -1,11 +1,6 @@
 {% load i18n %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% trans "Transactions list" %}</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block body %}
     <h1>{% trans "Transactions list" %}</h1>
     <p>
         <table>
@@ -19,12 +14,10 @@
                 <td>{{ object.label }}</td>
                 <td>{{ object.initial_amount }}</td>
                 <td>{{ object.initial_currency }}</td>
-
             </tr>
         </table>
 
         <td><a href={% url "transaction_list" %}>Retour</a></td>
 
     </p>
-</body>
-</html>
+{%  endblock %}
