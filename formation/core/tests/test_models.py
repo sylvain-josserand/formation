@@ -1,8 +1,7 @@
 from django.test import TransactionTestCase
-from .models import Transaction
+from core.models import Transaction
 from decimal import Decimal
 from unittest.mock import patch
-import requests
 
 
 class MockResponse:
@@ -58,8 +57,8 @@ class TestModels(TransactionTestCase):
             )
         self.assertEqual('test', transaction.label)
         self.assertEqual(123.45, transaction.initial_amount)
-        self.assertEqual(105.91111873713109, transaction.converted_amount)
-        self.assertEqual(1.1656, transaction.conversion_rate)
+        self.assertEqual(Decimal('105.9111187371310964980345860'), transaction.converted_amount)
+        self.assertEqual(Decimal('1.165599999999999969446662362'), transaction.conversion_rate)
 
         t2 = Transaction.activetransactions.get(pk=transaction.id)
         self.assertEqual('test', t2.label)

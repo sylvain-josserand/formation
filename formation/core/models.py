@@ -55,7 +55,7 @@ class Transaction(DatedModel):
     def conversion_rate(self):
         if self.initial_amount == 0:
             raise Exception("Not possible to get the conversion rate when initial amount is zero!")
-        return self.initial_amount/self.converted_amount
+        return Decimal(self.initial_amount)/Decimal(self.converted_amount)
 
     def convert(self, from_, to, amount):
         if from_==to:
