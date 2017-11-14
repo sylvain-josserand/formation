@@ -7,6 +7,7 @@ import requests
 
 class MockResponse:
     status_code = 200
+
     def json(self):
         return {
             "base": "EUR",
@@ -17,8 +18,17 @@ class MockResponse:
         }
 
 
+class MockBadResponse:
+    status_code = 501
+
+
 def mock_fixer_response(*args, **kwargs):
     return MockResponse()
+
+
+def mock_fixer_bad_response(*args, **kwargs):
+    return MockBadResponse()
+
 
 
 class TestModels(TransactionTestCase):
@@ -65,3 +75,11 @@ class TestModels(TransactionTestCase):
         with self.assertRaises(Exception):
             transaction.conversion_rate
 
+    def testResonseCode(self):
+        with self.assertRaises(Exception):
+            with patch('requests.get', mock_fixer_bad_response) as mock_request:
+                transaction = Transaction.activetransactions.create(
+                    label='test1',
+                    initial_amount=123.45,
+                    initial_currency='USD'
+                )
