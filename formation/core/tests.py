@@ -56,3 +56,12 @@ class TestModels(TransactionTestCase):
         self.assertEqual(Decimal('123.45'), t2.initial_amount)
         self.assertEqual(Decimal('105.91'), t2.converted_amount)
         self.assertEqual(Decimal('1.165612312340666603720139741'), t2.conversion_rate)
+
+    def testZeroAmount(self):
+        transaction = Transaction.activetransactions.create(
+            label='test',
+            initial_amount=0,
+        )
+        with self.assertRaises(Exception):
+            transaction.conversion_rate
+
