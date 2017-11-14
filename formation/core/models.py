@@ -28,6 +28,8 @@ class DatedModel(models.Model):
 
 
 class Transaction(DatedModel):
+    class Meta:
+        default_manager_name = 'objects'
     label = models.CharField(max_length=100)
     initial_amount = MoneyField()
     initial_currency = models.CharField(
@@ -42,6 +44,7 @@ class Transaction(DatedModel):
     converted_amount = MoneyField(default=None, blank=True, null=True)
     active = models.BooleanField(default=True)
 
+    objects = models.Manager()
     activetransactions = ActiveTransactionManager()
 
     def save(self, *args, **kwargs):

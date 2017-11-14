@@ -6,19 +6,22 @@
     <title>{% trans "Transactions list" %}</title>
 </head>
 <body>
-    <table>
-        <tr>
-            <th>{%  trans 'Label' %}</th>
-            <th>{%  trans 'Amount' %}</th>
-            <th>{%  trans 'Currency' %}</th>
-        </tr>
-        {% for object in object_list %}
-        <tr>
-            <td>{{ object.label }}</td>
-            <td>{{ object.initial_amount }}</td>
-            <td>{{ object.initial_currency }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <h1>{% trans "Transactions list" %}</h1>
+    <p>
+        <table>
+            <tr>
+                <th>{%  trans 'Label' %}</th>
+                <th>{%  trans 'Amount' %}</th>
+                <th>{%  trans 'Currency' %}</th>
+            </tr>
+            {% for object in object_list %}
+            <tr>
+                <td>{{ object.label }}</td>
+                <td>{{ object.initial_amount }}</td>
+                <td>{{ object.initial_currency }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
 </body>
 </html>
