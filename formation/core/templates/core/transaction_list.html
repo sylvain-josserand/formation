@@ -1,0 +1,24 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "Transactions list" %}</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>{%  trans 'Label' %}</th>
+            <th>{%  trans 'Amount' %}</th>
+            <th>{%  trans 'Currency' %}</th>
+        </tr>
+        {% for object in object_list %}
+        <tr>
+            <td>{{ object.label }}</td>
+            <td>{{ object.initial_amount }}</td>
+            <td>{{ object.initial_currency }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
