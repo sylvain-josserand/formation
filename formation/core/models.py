@@ -69,6 +69,6 @@ class Transaction(DatedModel):
                 assert 'base' in json_response
                 assert json_response['base'] == to
                 rate = json_response['rates'][from_]
-                return amount/rate
+                return Decimal(amount)/Decimal(rate)
             else:
                 raise Exception('Error when accessing fixer.io')
