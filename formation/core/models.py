@@ -49,9 +49,9 @@ class Transaction(DatedModel):
 
     @property
     def conversion_rate(self):
-        if self.amount == 0:
+        if self.initial_amount == 0:
             raise Exception("Not possible to get the conversion rate when initial amount is zero!")
-        return self.converted_amount/self.amount
+        return self.converted_amount/self.initial_amount
 
     def convert(self, from_, to, amount):
         if from_==to:
