@@ -1,4 +1,2 @@
 /formation/db.sqlite3
-/.idea/*
-formation/core/__pycache__/*
-formation/core/migrations/__pycache__/*
+/.idea
