@@ -15,9 +15,10 @@
                 <td>{{ object.label }}</td>
                 <td>{{ object.initial_amount }}</td>
                 <td>{{ object.initial_currency }}</td>
-                <td><a href={% url "transaction_detail" object.id %}>Detail</a></td>
+                <td><a href="{% url "transaction_detail" object.id %}">Detail</a></td>
             </tr>
             {% endfor %}
         </table>
+        <a href="{% url 'transaction_create' %}">Create new transaction</a>
     </p>
 {% endblock %}
