@@ -2,7 +2,8 @@ from core.models import Transaction
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView
-
+from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
 
 class AuthMixin:
     def get_queryset(self):
@@ -19,7 +20,19 @@ class AuthMixin:
 
 class TransactionListView(AuthMixin, ListView):
     model = Transaction
+    def get(self, *args, **kwargs):
+        from core.tasks import update_currency_conversion
+        import django_rq
+        for transaction in Transaction.objects.all():
+            print('enqueue:', transaction.id)
+            django_rq.enqueue(
+                transaction.convert,
+                transaction.initial_currency,
+                'USD',
+                transaction.initial_amount,
+            )
 
+        return super().get(*args, **kwargs)
 
 class TransactionDetailView(AuthMixin, DetailView):
     model = Transaction

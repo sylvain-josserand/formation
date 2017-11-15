@@ -62,7 +62,7 @@ class Transaction(DatedModel):
             return amount
         else:
             # Get conversion rates from fixer.io
-            response = requests.get('https://api.fixer.io/latest')
+            response = requests.get('https://api.fixer.io/latest?base={}'.format(to))
 
             if response.status_code == 200:
                 json_response = response.json()

@@ -13,7 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf import settings
+from django.conf.urls import url, include
 from django.contrib import admin
 from core.views import (
     TransactionListView,
@@ -28,3 +29,9 @@ urlpatterns = [
     url(r'^create$', TransactionCreateView.as_view(), name='transaction_create'),
     url(r'^detail/(?P<pk>\d+)', TransactionDetailView.as_view(), name='transaction_detail'),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
