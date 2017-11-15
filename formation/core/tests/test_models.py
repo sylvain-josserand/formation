@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.test import TransactionTestCase
 from core.models import Transaction
 from decimal import Decimal
@@ -31,11 +32,14 @@ def mock_fixer_bad_response(*args, **kwargs):
 
 
 class TestModels(TransactionTestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user('Test User')
     def testCreateTransaction(self):
         transaction = Transaction.activetransactions.create(
             label='test',
             initial_amount=123.45,
-            initial_currency = 'EUR'
+            initial_currency = 'EUR',
+            owner=self.user1,
         )
         self.assertEqual('test', transaction.label)
         self.assertEqual(123.45, transaction.initial_amount)
@@ -53,7 +57,8 @@ class TestModels(TransactionTestCase):
             transaction = Transaction.activetransactions.create(
                 label='test',
                 initial_amount=123.45,
-                initial_currency='USD'
+                initial_currency='USD',
+                owner=self.user1,
             )
         self.assertEqual('test', transaction.label)
         self.assertEqual(123.45, transaction.initial_amount)
@@ -70,6 +75,7 @@ class TestModels(TransactionTestCase):
         transaction = Transaction.activetransactions.create(
             label='test',
             initial_amount=0,
+            owner=self.user1,
         )
         with self.assertRaises(Exception):
             transaction.conversion_rate
@@ -80,5 +86,6 @@ class TestModels(TransactionTestCase):
                 transaction = Transaction.activetransactions.create(
                     label='test1',
                     initial_amount=123.45,
-                    initial_currency='USD'
+                    initial_currency='USD',
+                    owner=self.user1,
                 )
